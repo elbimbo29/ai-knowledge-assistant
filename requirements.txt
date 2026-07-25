@@ -3,3 +3,6 @@ sentence-transformers
 faiss-cpu
 openai
 python-dotenv
+
+PyPDF2
+markdown
