@@ -1,24 +1,16 @@
-# Core Python libraries
-numpy==1.26.4
-pandas==2.2.2
-
-# Embeddings and NLP
-sentence-transformers==3.0.1
-transformers==4.42.4
-torch==2.3.1
-
-# Vector database
-faiss-cpu==1.8.0
-
-# OpenAI API
-openai==1.35.13
-
-# Streamlit UI
-streamlit==1.36.0
-
-# Utilities
-python-dotenv==1.0.1
-
+streamlit==1.37.0
+langchain-core==1.5.1
+langchain-openai==1.4.1
+langgraph==1.2.9
+langgraph-prebuilt==1.1.0
+langgraph-sdk==0.4.2
+chromadb==0.5.3
+openai==2.46.0
+pydantic==2.7.4
+pydantic-core==2.18.4
+tenacity==8.3.0
+packaging==24.1
+PyPDF2==3.0.1
 
 
 PyPDF2
