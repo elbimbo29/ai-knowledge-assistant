@@ -1,1 +1,46 @@
-.vercel
+# Virtual environments
+venv/
+.env/
+*.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Streamlit specific
+.streamlit/
+.streamlit/secrets.toml
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Build / dist
+build/
+dist/
+*.egg-info/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Node modules (if any frontend assets)
+node_modules/
+
+# Coverage / testing
+.coverage
+htmlcov/
+.pytest_cache/
+
