@@ -1,0 +1,17 @@
+# Render service configuration file
+# Place this at the root of your repo as render.yaml
+
+services:
+  - type: web
+    name: ai-knowledge-assistant         # Name of your Render service
+    env: docker                          # Use Dockerfile for deployment
+    plan: free                           # Render plan (free, starter, standard, etc.)
+    autoDeploy: true                     # Automatically deploy on every push to main
+    branch: main                         # Branch to deploy from
+    dockerfilePath: ./Dockerfile         # Path to your Dockerfile
+    healthCheckPath: /                   # Health check endpoint (Streamlit root URL)
+    envVars:                             # Environment variables for your app
+      - key: OPENAI_API_KEY
+        sync: false                      # Set in Render dashboard (not stored in repo)
+      - key: STREAMLIT_PORT
+        value: 8501                      # Default Streamlit port
