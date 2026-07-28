@@ -7,11 +7,14 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:   # allows manual trigger
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        mode: [mock, real]   # run both modes
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -28,14 +31,16 @@ jobs:
           pip install pytest
 
       - name: Run pytest
+        env:
+          USE_MEMORY_DB: true
+          USE_MOCK: ${{ matrix.mode == 'mock' && 'true' || 'false' }}
+          OPENAI_API_KEY: ${{ matrix.mode == 'real' && secrets.OPENAI_API_KEY || '' }}
         run: PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest --maxfail=1 --disable-warnings -q
-        # ✅ Fix: explicitly add ./src to PYTHONPATH so tests can import src.backend
 
   docker-build-push:
     runs-on: ubuntu-latest
     needs: build-and-test
     if: github.ref == 'refs/heads/main'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -59,7 +64,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker-build-push
     if: github.ref == 'refs/heads/main'
-
     steps:
       - name: Trigger Render Deploy
         run: |

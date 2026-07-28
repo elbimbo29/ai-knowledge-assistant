@@ -1,33 +1,39 @@
-import os
-import shutil
-import pytest
-from src.backend import rag_pipeline
+"""
+tests/test_rag.py
+Unit tests for rag_pipeline and helper functions.
+"""
 
-# --- Paths to sample files ---
+import os
+import pytest
+from src.rag_pipeline import rag_pipeline   # class instance with add_document, get_answer, run
+
+# --- Force in-memory Chroma for tests ---
+os.environ["USE_MEMORY_DB"] = "True"
+
 DATA_DIR = "data"
-SAMPLE_TXT = os.path.join(DATA_DIR, "sample.txt")
 SAMPLE_PDF = os.path.join(DATA_DIR, "sample.pdf")
 SAMPLE_MD = os.path.join(DATA_DIR, "sample.md")
 
-# --- ChromaDB persistence directory ---
-CHROMA_DIR = "chroma_store"
 
-@pytest.fixture(autouse=True)
-def clean_chroma_store():
+def test_rag_pipeline_mock():
     """
-    Cleanup ChromaDB store before each test run.
-    Ensures tests always start with a fresh vector database.
+    Test rag_pipeline in mock mode.
+    This avoids needing an OpenAI API key and ensures CI/CD can run safely.
     """
-    if os.path.exists(CHROMA_DIR):
-        shutil.rmtree(CHROMA_DIR)
-    os.makedirs(CHROMA_DIR, exist_ok=True)
-    yield
-    # Optional cleanup after test run
-    if os.path.exists(CHROMA_DIR):
-        shutil.rmtree(CHROMA_DIR)
+    docs = ["The Eiffel Tower is in Paris.", "The Colosseum is in Rome."]
+    query = "Where is the Eiffel Tower?"
+
+    result = rag_pipeline.run(docs, query, mock=True)
+
+    assert "MOCK ANSWER" in result["answer"]
+    assert len(result["retrieved_chunks"]) == 2
+    assert query in result["answer"]
+
 
 def test_add_and_query_txt():
-    """End-to-end test: ingest TXT and query it."""
+    """
+    End-to-end test: ingest TXT and query it.
+    """
     class DummyFile:
         type = "text/plain"
         def read(self):
@@ -40,8 +46,12 @@ def test_add_and_query_txt():
     assert "answer" in response
     assert isinstance(response["answer"], str)
 
+
 def test_add_and_query_pdf():
-    """End-to-end test: ingest PDF and query it."""
+    """
+    End-to-end test: ingest PDF and query it.
+    Skips if sample.pdf is not found in data/.
+    """
     if os.path.exists(SAMPLE_PDF):
         dummy_pdf = open(SAMPLE_PDF, "rb")
         dummy_pdf.type = "application/pdf"
@@ -54,8 +64,12 @@ def test_add_and_query_pdf():
     else:
         pytest.skip("sample.pdf not found in data/")
 
+
 def test_add_and_query_md():
-    """End-to-end test: ingest Markdown and query it."""
+    """
+    End-to-end test: ingest Markdown and query it.
+    Skips if sample.md is not found in data/.
+    """
     if os.path.exists(SAMPLE_MD):
         dummy_md = open(SAMPLE_MD, "rb")
         dummy_md.type = "text/markdown"
@@ -67,6 +81,7 @@ def test_add_and_query_md():
         assert isinstance(response["answer"], str)
     else:
         pytest.skip("sample.md not found in data/")
+
 
 def test_get_answer_basic():
     """
@@ -80,3 +95,21 @@ def test_get_answer_basic():
     assert isinstance(response["answer"], str)
     assert "retrieved_chunks" in response
     assert isinstance(response["retrieved_chunks"], list)
+
+
+@pytest.mark.skipif(
+    not os.getenv("OPENAI_API_KEY"),
+    reason="Requires OPENAI_API_KEY for real mode"
+)
+def test_rag_pipeline_real_mode():
+    """
+    Real mode test: runs only if OPENAI_API_KEY is set.
+    Validates actual retrieval + LLM integration.
+    """
+    docs = ["The Eiffel Tower is in Paris."]
+    query = "Where is the Eiffel Tower?"
+
+    result = rag_pipeline.run(docs, query)
+
+    # Expect GPT to mention "Paris" in the answer
+    assert "Paris" in result["answer"]

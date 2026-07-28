@@ -1,17 +1,25 @@
-streamlit==1.37.0
-langchain-core==1.5.1
-langchain-openai==1.4.1
-langgraph==1.2.9
-langgraph-prebuilt==1.1.0
-langgraph-sdk==0.4.2
-chromadb==0.5.3
-openai==2.46.0
-pydantic==2.7.4
-pydantic-core==2.18.4
-tenacity==8.3.0
-packaging==24.1
-PyPDF2==3.0.1
+# --- Core app framework ---
+streamlit==1.37.0        # Web UI framework for building interactive dashboards
+openai==1.55.3           # Latest 1.x release, compatible with langchain-openai 0.1.7
 
+# --- LangChain ecosystem (aligned on langchain-core 0.2.x) ---
+langchain==0.2.14        # Main LangChain library (chains, agents, integrations)
+langchain-core==0.2.38   # Core abstractions required by langchain + langchain-openai
+langchain-openai==0.1.7  # LangChain wrapper for OpenAI models
+langchain-chroma==0.1.4  # LangChain integration with ChromaDB vector store
+langsmith==0.1.75        # Required by langchain-core==0.2.38
+langchain-text-splitters==0.2.4
 
-PyPDF2
-markdown
+# --- Vector database ---
+chromadb==0.5.3          # ChromaDB vector database (modern version, matches langchain-chroma)
+rpds-py==0.18.0          # Rust-based persistent data structures (dependency of ChromaDB)
+
+# --- Validation & utilities ---
+pydantic==2.7.4          # Data validation and settings management
+pydantic-core==2.18.4    # Core engine for Pydantic v2
+tenacity==8.3.0          # Retry logic utility (used by LangChain + OpenAI clients)
+packaging==24.1          # Version parsing and packaging utilities
+
+# --- Document handling ---
+pypdf==4.2.0             # PDF parsing and manipulationx
+markdown==3.7            # Markdown parsing/rendering

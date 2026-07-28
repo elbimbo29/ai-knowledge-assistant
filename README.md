@@ -1,8 +1,16 @@
 # AI Knowledge Assistant
 > A Streamlit + RAG-based AI assistant powered by OpenAI, ChromaDB, and LangChain.  
-> It allows you to upload documents (PDF, TXT, MD), embed them into a vector database, and query them using GPT for contextual answers.
+> It ingests documents (PDF, TXT, Markdown), indexes them in a vector database, and answers queries using OpenAI models.
 
-![CI/CD Pipeline](https://github.com/<YOUR_USERNAME>/ai-knowledge-assistant/actions/workflows/deploy.yml/badge.svg)
+
+# AI Knowledge Assistant
+
+[![CI/CD Pipeline](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/actions/workflows/deploy.yml/badge.svg)](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/actions/workflows/deploy.yml)
+[![Render Deploy](https://render.com/badges/<YOUR_RENDER_SERVICE_ID>)](https://<YOUR_RENDER_APP_URL>)
+[![Docker Image](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/actions/workflows/deploy.yml/badge.svg?event=push)](https://ghcr.io/<YOUR_USERNAME>/<YOUR_REPO>/ai-knowledge-assistant:latest)
+[![Version](https://img.shields.io/github/v/release/<YOUR_USERNAME>/<YOUR_REPO>?sort=semver)](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/releases)
+
+
 <!-- Badge shows CI/CD status (✅ passing / ❌ failing / ⏳ running) -->
 
 ---
@@ -30,7 +38,6 @@ pip install -r requirements.txt
 
 # Run Streamlit app
 streamlit run app.py
-
 
 ## 🛠️ Troubleshooting
 
@@ -86,3 +93,21 @@ streamlit run app.py
 - [ ] Verify GitHub secrets (`RENDER_API_KEY`, `RENDER_SERVICE_ID`).  
 - [ ] Add environment variables in Render dashboard.  
 - [ ] Check Render logs if deploy 
+
+---
+
+## 🧪 Testing Notes
+
+### Import Path Issues
+- Tests in `tests/test_rag.py` import modules from `src/` (e.g., `from src.backend import rag_pipeline`).
+- By default, GitHub Actions and some local environments don’t include `src/` in the Python path.
+- This caused the error:  ModuleNotFoundError: No module named 'src'
+
+### Fixes Applied
+- Added empty `__init__.py` files in both `src/` and `tests/` directories to make them proper Python packages.
+- Updated CI workflow (`deploy.yml`) to run pytest with:
+```bash
+PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest --maxfail=1 --disable-warnings -q
+- This ensures Python can locate the src package during test runs.
+
+
