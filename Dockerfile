@@ -1,4 +1,6 @@
 # ---------- Builder stage ----------
+# This stage builds dependencies inside a virtual environment.
+# Using a builder stage keeps the final image smaller and cleaner.
 FROM python:3.12-slim AS builder
 
 WORKDIR /app

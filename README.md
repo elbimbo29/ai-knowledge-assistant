@@ -1,17 +1,23 @@
-# AI Knowledge Assistant
-> A Streamlit + RAG-based AI assistant powered by OpenAI, ChromaDB, and LangChain.  
-> It ingests documents (PDF, TXT, Markdown), indexes them in a vector database, and answers queries using OpenAI models.
+# 🤖 AI Knowledge Assistant
+An end‑to‑end **Retrieval‑Augmented Generation (RAG)** application built with **Streamlit**, **LangChain**, **ChromaDB**, and **OpenAI**.  
+It allows users to upload documents, query them via natural language, and receive context‑aware answers.
 
-
-# AI Knowledge Assistant
-
-[![CI/CD Pipeline](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/actions/workflows/deploy.yml/badge.svg)](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/actions/workflows/deploy.yml)
-[![Render Deploy](https://render.com/badges/<YOUR_RENDER_SERVICE_ID>)](https://<YOUR_RENDER_APP_URL>)
-[![Docker Image](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/actions/workflows/deploy.yml/badge.svg?event=push)](https://ghcr.io/<YOUR_USERNAME>/<YOUR_REPO>/ai-knowledge-assistant:latest)
-[![Version](https://img.shields.io/github/v/release/<YOUR_USERNAME>/<YOUR_REPO>?sort=semver)](https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/releases)
-
-
-<!-- Badge shows CI/CD status (✅ passing / ❌ failing / ⏳ running) -->
+## 🗂 Project Structure
+ai-knowledge-assistant/
+├── app.py                 # Streamlit UI
+├── requirements.txt       # Dependencies
+├── Dockerfile             # Containerization
+├── .dockerignore          # Docker exclusions
+├── .github/workflows/     # CI/CD pipeline
+│   └── deploy.yml
+├── src/backend/           # Backend logic
+│   ├── rag_pipeline.py    # Core RAG pipeline
+│   ├── retrieve.py        # UI → Pipeline bridge
+│   ├── chroma_index.py    # Direct ChromaDB access
+│   └── init.py
+├── tests/                 # Unit/integration tests
+├── chroma_db/             # Persistent vector storage
+└── README.md              # Documentation
 
 ---
 
@@ -27,87 +33,95 @@
 
 ---
 
-## 🧩 Local Development
+## ⚙️ Local Development Setup
+
+Follow these steps to get the AI Knowledge Assistant running on your local machine:
+
+### 1. [Clone the repository](ca://s?q=Clone_repository)
 ```bash
-# Clone repo
-git clone https://github.com/<YOUR_USERNAME>/ai-knowledge-assistant.git
+git clone https://github.com/your-username/ai-knowledge-assistant.git
 cd ai-knowledge-assistant
 
-# Install dependencies
+2. Install dependencies
 pip install -r requirements.txt
 
-# Run Streamlit app
+3. Set environment variables
+Create a .env file in the project root and add your OpenAI key:
+OPENAI_API_KEY=your_openai_key
+
+4. Run locally
 streamlit run app.py
 
-## 🛠️ Troubleshooting
-
-### GitHub Actions
-- **Tests failing (❌ badge)**  
-  - Run `pytest` locally to confirm errors.  
-  - Check `tests/test_rag.py` → ensure sample files (`sample.pdf`, `sample.md`) exist in `data/`.  
-  - If missing, tests will skip gracefully, but ingestion tests won’t run.
-
-- **Docker build errors**  
-  - Confirm `Dockerfile` is in repo root.  
-  - Ensure `requirements.txt` includes all dependencies (Streamlit, LangChain, ChromaDB, PyPDF2, etc.).  
-  - Run locally:  
-    ```bash
-    docker build -t ai-knowledge-assistant .
-    ```
-
-- **GHCR push fails**  
-  - Check GitHub Actions logs for authentication issues.  
-  - Ensure `GITHUB_TOKEN` is available (default in Actions).  
-  - Verify image tag format:  
-    ```
-    ghcr.io/<YOUR_USERNAME>/ai-knowledge-assistant:latest
-    ```
-
-### Render Deployment
-- **Deploy not triggered**  
-  - Confirm GitHub secrets are set:  
-    - `RENDER_API_KEY` → from Render account.  
-    - `RENDER_SERVICE_ID` → from Render dashboard.  
-  - Check `deploy-render` job logs in Actions.
-
-- **App fails to start**  
-  - Check Render logs → likely missing environment variables.  
-  - Ensure `OPENAI_API_KEY` is set in Render dashboard.  
-  - Confirm `STREAMLIT_PORT=8501`.
-
-- **Health check failing**  
-  - Verify `healthCheckPath: /` in `render.yaml`.  
-  - Streamlit must serve on port `8501`.  
-  - If using custom routes, adjust health check path.
-
-- **App loads but queries fail**  
-  - Double-check `OPENAI_API_KEY` validity.  
-  - Ensure ChromaDB persistence directory (`chroma_store`) is writable in container.  
-  - Run locally with same Docker image to reproduce.
+5. Run tests
+pytest --maxfail=1 --disable-warnings -q
 
 ---
 
-## ✅ Quick Fix Checklist
-- [ ] Run `pytest` locally before pushing.  
-- [ ] Confirm Docker builds locally.  
-- [ ] Verify GitHub secrets (`RENDER_API_KEY`, `RENDER_SERVICE_ID`).  
-- [ ] Add environment variables in Render dashboard.  
-- [ ] Check Render logs if deploy 
+## ☁️ Cloud Deployment Setup
 
----
+Follow these steps to deploy the AI Knowledge Assistant using Docker, GitHub Actions, GHCR, and Render:
 
-## 🧪 Testing Notes
-
-### Import Path Issues
-- Tests in `tests/test_rag.py` import modules from `src/` (e.g., `from src.backend import rag_pipeline`).
-- By default, GitHub Actions and some local environments don’t include `src/` in the Python path.
-- This caused the error:  ModuleNotFoundError: No module named 'src'
-
-### Fixes Applied
-- Added empty `__init__.py` files in both `src/` and `tests/` directories to make them proper Python packages.
-- Updated CI workflow (`deploy.yml`) to run pytest with:
+### 1. [Build Docker image](ca://s?q=Build_Docker_image)
 ```bash
-PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest --maxfail=1 --disable-warnings -q
-- This ensures Python can locate the src package during test runs.
+docker build -t ai-assistant .
+
+2. Run Docker locally
+docker run -p 8501:8501 ai-assistant
+
+3. Push image to GHCR
+Authenticate with GitHub Container Registry:
+echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+docker tag ai-assistant ghcr.io/USERNAME/ai-assistant:latest
+docker push ghcr.io/USERNAME/ai-assistant:latest
+
+4. CI/CD pipeline
+Build & Test → runs pytest in mock/real modes.
+
+Docker Build & Push → pushes image to GHCR.
+
+Deploy to Render → triggers Render API deployment automatically.
+
+5. Deploy to Render
+Connect your GitHub repo to Render.
+Configure environment variables (OPENAI_API_KEY).
+Render pulls the Docker image from GHCR and hosts the app.
+Access your app via Render’s public URL.
+
+
+🚀 Deployment
+CI/CD Pipeline
+Build & Test → runs pytest in mock/real modes.
+
+Docker Build & Push → pushes image to GHCR.
+
+Deploy to Render → triggers Render API deployment.
+
+## ⚙️ Manual Deployment
+docker build -t ai-assistant .
+docker run -p 8501:8501 ai-assistant
+
+
+📖 Documentation Phases
+
+Phase 01 → Streamlit UI setup (app.py)
+Phase 02 → Backend wrappers (retrieve.py)
+Phase 03 → RAG pipeline (rag_pipeline.py)
+Phase 04 → Chroma index (chroma_index.py)
+Phase 05 → CI/CD workflow (deploy.yml)
+Phase 06 → Requirements documentation
+Phase 07 → Project structure
+Phase 08 → Architecture diagram
+Phase 09 → Sequence diagram
+Phase 10 → Deployment diagram
+Phase 11 → Component & layered architecture
+
+🧪 Testing
+Run tests with:  pytest --maxfail=1 --disable-warnings -q
+
+
+👨‍💻 Author
+Built by Bimbo — transitioning into AI engineering, focusing on RAG systems, deployment workflows, and applied LLMs.
+
+
 
 

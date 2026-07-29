@@ -1,32 +1,32 @@
-# Ignore Python cache and bytecode
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# ---------- Python artifacts ----------
+__pycache__/        # compiled Python bytecode cache directories
+*.pyc               # compiled Python files
+*.pyo               # optimized Python files
+*.pyd               # compiled extension modules
 
-# Ignore virtual environments
-venv/
-.env
+# ---------- Virtual environments ----------
+venv/               # local virtual environment folder
+.env                # environment variables file (contains secrets, must not be copied)
 
-# Ignore test files and coverage reports
-tests/
-.coverage
-htmlcov/
-*.log
+# ---------- Testing & coverage ----------
+tests/              # test files (not needed in container image)
+.coverage           # coverage data file
+htmlcov/            # coverage HTML reports
+*.log               # log files generated during dev/test
 
-# Ignore local development artifacts
-.DS_Store
-*.swp
-*.swo
+# ---------- Local dev artifacts ----------
+.DS_Store           # macOS Finder metadata
+*.swp               # Vim swap files
+*.swo               # Vim temporary files
 
-# Ignore Git files
-.git
-.gitignore
+# ---------- Git metadata ----------
+.git                # Git repo data (not needed in container)
+.gitignore          # ignore rules file itself
 
-# Ignore build outputs
-dist/
-build/
-*.egg-info/
+# ---------- Build outputs ----------
+dist/               # distribution packages
+build/              # build artifacts
+*.egg-info/         # Python package metadata
 
-# Ignore Docker files not needed inside container
-docker-compose.yml
+# ---------- Docker artifacts ----------
+docker-compose.yml  # local Docker Compose config (not needed inside container)

@@ -2,6 +2,7 @@
 venv/
 ENV/
 env/
+.env
 
 # Python cache and build artifacts
 __pycache__/
@@ -29,3 +30,7 @@ Thumbs.db
 # IDE/project settings
 .vscode/
 .idea/
+
+.env
+secrets.json
+chroma_db/
