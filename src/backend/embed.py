@@ -1,3 +1,12 @@
+# ============================================================
+# embed.py
+# Purpose: Build and manage a Chroma index for document embeddings.
+# - Loads documents from /data (txt, md, pdf)
+# - Splits text into chunks
+# - Embeds chunks using OpenAI embeddings
+# - Stores/retrieves vectors in ChromaDB (persistent or in-memory)
+# ============================================================
+
 import os
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
@@ -17,20 +26,17 @@ def load_documents(path="data/"):
     for filename in os.listdir(path):
         filepath = os.path.join(path, filename)
 
-        # Handle plain text files
         if filename.endswith(".txt"):
             with open(filepath, "r", encoding="utf-8") as f:
                 docs.append(f.read())
 
-        # Handle markdown files (.md)
         elif filename.endswith(".md"):
             with open(filepath, "r", encoding="utf-8") as f:
                 md_content = f.read()
-                html = markdown.markdown(md_content)        # convert to HTML
-                plain_text = "".join(html.split("<")[0::2]) # strip tags
+                html = markdown.markdown(md_content)
+                plain_text = "".join(html.split("<")[0::2])  # strip tags
                 docs.append(plain_text)
 
-        # Handle PDF files
         elif filename.endswith(".pdf"):
             pdf_reader = pypdf.PdfReader(filepath)
             pdf_text = ""
@@ -52,16 +58,25 @@ def chunk_text(text, chunk_size=500):
 def build_index(chunks, persist_directory="chroma_db"):
     """
     Convert text chunks into embeddings and store them in a Chroma collection.
-    Persists the collection to disk for reuse.
+    Persistence is automatic when persist_directory is set.
     """
     vectorstore = Chroma(
         collection_name="documents",
         embedding_function=embeddings,
         persist_directory=persist_directory
     )
-    vectorstore.add_texts(chunks)   # add chunks into Chroma
-    vectorstore.persist()           # save to disk
+    vectorstore.add_texts(chunks)
     return vectorstore
+
+def save_index(vectorstore):
+    """
+    Force persistence of ChromaDB to disk.
+    Useful if you want to explicitly flush changes.
+    """
+    try:
+        vectorstore._client.persist()
+    except Exception as e:
+        raise RuntimeError(f"Failed to persist vectorstore: {e}")
 
 def load_index(persist_directory="chroma_db"):
     """
@@ -90,6 +105,7 @@ if __name__ == "__main__":
         for doc in docs:
             chunks.extend(chunk_text(doc))
         vectorstore = build_index(chunks)
+        save_index(vectorstore)   # ✅ Explicit flush
         print(f"Stored {len(chunks)} chunks in Chroma collection.")
     else:
         print("Chroma index loaded successfully.")
