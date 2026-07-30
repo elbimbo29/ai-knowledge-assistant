@@ -1,1 +1,2 @@
-from .rag_pipeline import rag_pipeline
+# src/__init__.py
+# (leave empty)

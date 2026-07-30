@@ -4,6 +4,7 @@ It allows users to upload documents, query them via natural language, and receiv
 
 ## 🗂 Project Structure
 ai-knowledge-assistant/
+│
 ├── app.py                 # Streamlit UI
 ├── requirements.txt       # Dependencies
 ├── Dockerfile             # Containerization
