@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 # --- Load environment variables ---
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-USE_MOCK = os.getenv("USE_MOCK", "False").lower() == "true"
+USE_MOCK = os.getenv("USE_MOCK", "real").lower() == "mock"   # interpret "mock" vs "real"
 USE_MEMORY_DB = os.getenv("USE_MEMORY_DB", "False").lower() == "true"
 
 # --- LangChain imports ---
@@ -34,7 +34,7 @@ class RAGPipeline:
         self.llm = None
         self.vectorstore = None
 
-        if OPENAI_API_KEY:
+        if OPENAI_API_KEY and not USE_MOCK:
             self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
             self.llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
@@ -56,7 +56,6 @@ class RAGPipeline:
                 reader = PdfReader(uploaded_file)
                 text = "\n".join([page.extract_text() or "" for page in reader.pages])
             else:
-                # Use getvalue() instead of read() to avoid empty string issues
                 text = uploaded_file.getvalue().decode("utf-8").strip()
 
             if not text:
@@ -66,7 +65,8 @@ class RAGPipeline:
             chunks = splitter.split_text(text)
             docs = [Document(page_content=chunk) for chunk in chunks]
 
-            self.vectorstore.add_documents(docs)
+            if self.vectorstore:
+                self.vectorstore.add_documents(docs)
             return True
 
         except Exception as e:
@@ -76,6 +76,12 @@ class RAGPipeline:
         """
         Retrieve context from ChromaDB and generate an answer with GPT.
         """
+        if USE_MOCK or not OPENAI_API_KEY:
+            return {
+                "answer": f"[MOCK ANSWER] Query='{query}'",
+                "retrieved_chunks": []
+            }
+
         try:
             results = self.vectorstore.similarity_search_with_score(query, k=top_k)
             retrieved_chunks = [
@@ -99,11 +105,11 @@ class RAGPipeline:
         except Exception as e:
             raise RuntimeError(f"Failed to retrieve answer: {e}")
 
-    def run(self, documents, query, mock: bool = False):
+    def run(self, documents, query):
         """
         Unified RAG pipeline for raw text documents.
         """
-        if mock or USE_MOCK or not OPENAI_API_KEY:
+        if USE_MOCK or not OPENAI_API_KEY:
             return {
                 "answer": f"[MOCK ANSWER] Query='{query}' | Docs={len(documents)}",
                 "retrieved_chunks": [{"chunk": doc, "score": 1.0} for doc in documents]
@@ -122,7 +128,7 @@ class RAGPipeline:
         """
         Force persistence of ChromaDB to disk.
         """
-        if not USE_MEMORY_DB:
+        if not USE_MEMORY_DB and self.vectorstore:
             try:
                 self.vectorstore._client.persist()
             except Exception as e:

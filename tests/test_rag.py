@@ -106,6 +106,10 @@ def test_rag_pipeline_real_mode():
     Real mode test: runs only if OPENAI_API_KEY is set.
     Validates actual retrieval + LLM integration.
     """
+    # Skip if USE_MOCK is set to "mock"
+    if os.getenv("USE_MOCK") == "mock":
+        pytest.skip("Skipping real mode test because USE_MOCK=mock")
+
     docs = ["The Eiffel Tower is in Paris."]
     query = "Where is the Eiffel Tower?"
 
