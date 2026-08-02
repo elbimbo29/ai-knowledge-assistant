@@ -4,6 +4,9 @@ An end‑to‑end Retrieval‑Augmented Generation (RAG) application powered by 
 It features a CI/CD pipeline with GitHub Actions for automated builds and testing, and is deployed seamlessly to Render using Docker images published to GitHub Container Registry (GHCR).
 
 ---
+## 🏗️ Architecture Diagram
+![Project Architecture](images/architecture-diagram.png)
+---
 ## 🗂 Project Structure
 ![Project Structure](images/project-structure.png)
 ---
