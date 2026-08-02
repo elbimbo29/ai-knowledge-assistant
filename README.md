@@ -6,6 +6,35 @@ It features a CI/CD pipeline with GitHub Actions for automated builds and testin
 ---
 ## 🏗️ Architecture Diagram
 ![Project Architecture](images/architecture-diagram.png)
+
+## 🔄 Data Flow
+
+1. **User Interaction**
+   - Users upload documents or submit queries via the Streamlit UI.
+
+2. **Streamlit UI**
+   - Captures input and forwards it to the backend RAG pipeline.
+
+3. **LangChain RAG Pipeline**
+   - Converts documents into embeddings.
+   - Sends embeddings to ChromaDB for storage.
+   - Retrieves relevant context from ChromaDB during queries.
+
+4. **ChromaDB Vector Store**
+   - Stores document embeddings.
+   - Performs semantic vector search to return the most relevant chunks.
+
+5. **OpenAI API**
+   - Receives the query + retrieved context from LangChain.
+   - Generates a contextual answer.
+
+6. **Response Delivery**
+   - Streamlit UI displays the generated answer back to the user.
+
+7. **CI/CD & Deployment**
+   - GitHub Actions builds and pushes Docker images to GHCR.
+   - Render automatically redeploys the updated app.
+
 ---
 ## 🗂 Project Structure
 ![Project Structure](images/project-structure.png)
