@@ -24,3 +24,6 @@ packaging==24.1          # Version parsing and packaging utilities (dependency f
 # --- Document handling ---
 pypdf==4.2.0             # PDF parsing and text extraction for ingestion into RAG
 markdown==3.7            # Markdown parsing/rendering for handling .md files
+
+pytest>=8.0.0
+
