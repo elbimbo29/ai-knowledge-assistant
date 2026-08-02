@@ -34,74 +34,6 @@ ai-knowledge-assistant/
 
 ---
 
-## ⚙️ Local Development Setup
-
-Follow these steps to get the AI Knowledge Assistant running on your local machine:
-
-### 1. [Clone the repository](ca://s?q=Clone_repository)
-```bash
-git clone https://github.com/your-username/ai-knowledge-assistant.git
-cd ai-knowledge-assistant
-
-2. Install dependencies
-pip install -r requirements.txt
-
-3. Set environment variables
-Create a .env file in the project root and add your OpenAI key:
-OPENAI_API_KEY=your_openai_key
-
-4. Run locally
-streamlit run app.py
-
-5. Run tests
-pytest --maxfail=1 --disable-warnings -q
-
----
-
-## ☁️ Cloud Deployment Setup
-
-Follow these steps to deploy the AI Knowledge Assistant using Docker, GitHub Actions, GHCR, and Render:
-
-### 1. [Build Docker image](ca://s?q=Build_Docker_image)
-```bash
-docker build -t ai-assistant .
-
-2. Run Docker locally
-docker run -p 8501:8501 ai-assistant
-
-3. Push image to GHCR
-Authenticate with GitHub Container Registry:
-echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
-docker tag ai-assistant ghcr.io/USERNAME/ai-assistant:latest
-docker push ghcr.io/USERNAME/ai-assistant:latest
-
-4. CI/CD pipeline
-Build & Test → runs pytest in mock/real modes.
-
-Docker Build & Push → pushes image to GHCR.
-
-Deploy to Render → triggers Render API deployment automatically.
-
-5. Deploy to Render
-Connect your GitHub repo to Render.
-Configure environment variables (OPENAI_API_KEY).
-Render pulls the Docker image from GHCR and hosts the app.
-Access your app via Render’s public URL.
-
-
-🚀 Deployment
-CI/CD Pipeline
-Build & Test → runs pytest in mock/real modes.
-
-Docker Build & Push → pushes image to GHCR.
-
-Deploy to Render → triggers Render API deployment.
-
-## ⚙️ Manual Deployment
-docker build -t ai-assistant .
-docker run -p 8501:8501 ai-assistant
-
-
 📖 Documentation Phases
 
 Phase 01 → Streamlit UI setup (app.py)
@@ -119,10 +51,19 @@ Phase 11 → Component & layered architecture
 🧪 Testing
 Run tests with:  pytest --maxfail=1 --disable-warnings -q
 
+---
 
-👨‍💻 Author
-Built by Bimbo — transitioning into AI engineering, focusing on RAG systems, deployment workflows, and applied LLMs.
+## Application Screenshots
 
-
+### Home Screen
+![Home Screen](images/home-screen.png)
+### File Upload
+![File Upload](images/file-upload.png)
+### Chat Interface
+![Chat Interface](images/chat-interface.png)
+### Docker Publish
+![Results Display](images/docker-published.png)
+### Render Deployed
+![Results Display](images/render-deployed.png)
 
 
