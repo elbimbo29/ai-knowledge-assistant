@@ -20,26 +20,23 @@ It features a CI/CD pipeline with GitHub Actions for automated builds and testin
 
 ---
 
-📖 Documentation Phases
+## 📖 Documentation Phases
 
-Phase 01 → Streamlit UI setup (app.py)
-Phase 02 → Backend wrappers (retrieve.py)
-Phase 03 → RAG pipeline (rag_pipeline.py)
-Phase 04 → Chroma index (chroma_index.py)
-Phase 05 → CI/CD workflow (deploy.yml)
-Phase 06 → Requirements documentation
-Phase 07 → Project structure
-Phase 08 → Architecture diagram
-Phase 09 → Sequence diagram
-Phase 10 → Deployment diagram
-Phase 11 → Component & layered architecture
-
-🧪 Testing
-Run tests with:  pytest --maxfail=1 --disable-warnings -q
+- **Phase 01** → Streamlit UI setup (`app.py`)
+- **Phase 02** → Backend wrappers (`retrieve.py`)
+- **Phase 03** → RAG pipeline (`rag_pipeline.py`)
+- **Phase 04** → Chroma index (`chroma_index.py`)
+- **Phase 05** → CI/CD workflow (`deploy.yml`)
+- **Phase 06** → Requirements documentation
+- **Phase 07** → Project structure
+- **Phase 08** → Architecture diagram
+- **Phase 09** → Sequence diagram
+- **Phase 10** → Deployment diagram
+- **Phase 11** → Component & layered architecture
 
 ---
 
-## Application Screenshots
+## 🧪 Application Screenshots
 
 ### Home Screen
 ![Home Screen](images/home-screen.png)
