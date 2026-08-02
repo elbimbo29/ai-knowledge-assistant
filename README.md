@@ -1,24 +1,34 @@
 # 🤖 AI Knowledge Assistant
-An end‑to‑end **Retrieval‑Augmented Generation (RAG)** application built with **Streamlit**, **LangChain**, **ChromaDB**, and **OpenAI**.  
-It allows users to upload documents, query them via natural language, and receive context‑aware answers.
+An end‑to‑end Retrieval‑Augmented Generation (RAG) application powered by Streamlit, LangChain, ChromaDB, and OpenAI. This project enables users to upload documents, query them in natural language, and receive context‑aware answers through a clean, intuitive interface.
+
+It features a CI/CD pipeline with GitHub Actions for automated builds and testing, and is deployed seamlessly to Render using Docker images published to GitHub Container Registry (GHCR).
 
 ## 🗂 Project Structure
 ai-knowledge-assistant/
 │
-├── app.py                 # Streamlit UI
-├── requirements.txt       # Dependencies
-├── Dockerfile             # Containerization
-├── .dockerignore          # Docker exclusions
-├── .github/workflows/     # CI/CD pipeline
-│   └── deploy.yml
-├── src/backend/           # Backend logic
-│   ├── rag_pipeline.py    # Core RAG pipeline
-│   ├── retrieve.py        # UI → Pipeline bridge
-│   ├── chroma_index.py    # Direct ChromaDB access
-│   └── init.py
-├── tests/                 # Unit/integration tests
-├── chroma_db/             # Persistent vector storage
-└── README.md              # Documentation
+├── README.md                # Project overview, deployment docs, screenshots
+├── requirements.txt         # Python dependencies
+├── Dockerfile               # Docker build instructions
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml        # GitHub Actions workflow for CI/CD
+│
+├── src/                     # Application source code
+│   ├── app.py               # Streamlit entry point
+│   ├── rag_pipeline.py      # RAG logic (LangChain + ChromaDB)
+│   ├── utils.py             # Helper functions
+│   └── config.py            # Configs (API keys, paths, etc.)
+│
+├── tests/                   # Unit and integration tests
+│   ├── test_app.py
+│   └── test_rag_pipeline.py
+│
+└── images/                  # Screenshots (UI, deployment)
+    ├── home-screen.png
+    ├── file-upload.png
+    ├── chat-interface.png
+    └── results-display.png
+
 
 ---
 
