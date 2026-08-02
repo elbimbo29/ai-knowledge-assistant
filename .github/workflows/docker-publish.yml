@@ -1,0 +1,21 @@
+name: Docker Publish
+
+on:
+  workflow_dispatch:   # manual trigger only for testing
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/elbimbo29/ai-knowledge-assistant:latest .
+
+      - name: Push Docker image
+        run: docker push ghcr.io/elbimbo29/ai-knowledge-assistant:latest
