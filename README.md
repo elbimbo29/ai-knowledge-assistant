@@ -3,33 +3,9 @@ An end‑to‑end Retrieval‑Augmented Generation (RAG) application powered by 
 
 It features a CI/CD pipeline with GitHub Actions for automated builds and testing, and is deployed seamlessly to Render using Docker images published to GitHub Container Registry (GHCR).
 
+---
 ## 🗂 Project Structure
-ai-knowledge-assistant/
-│
-├── README.md                # Project overview, deployment docs, screenshots
-├── requirements.txt         # Python dependencies
-├── Dockerfile               # Docker build instructions
-├── .github/
-│   └── workflows/
-│       └── ci-cd.yml        # GitHub Actions workflow for CI/CD
-│
-├── src/                     # Application source code
-│   ├── app.py               # Streamlit entry point
-│   ├── rag_pipeline.py      # RAG logic (LangChain + ChromaDB)
-│   ├── utils.py             # Helper functions
-│   └── config.py            # Configs (API keys, paths, etc.)
-│
-├── tests/                   # Unit and integration tests
-│   ├── test_app.py
-│   └── test_rag_pipeline.py
-│
-└── images/                  # Screenshots (UI, deployment)
-    ├── home-screen.png
-    ├── file-upload.png
-    ├── chat-interface.png
-    └── results-display.png
-
-
+![Project Structure](images/project-structure.png)
 ---
 
 ## 🚀 Features
@@ -72,8 +48,9 @@ Run tests with:  pytest --maxfail=1 --disable-warnings -q
 ### Chat Interface
 ![Chat Interface](images/chat-interface.png)
 ### Docker Publish
-![Results Display](images/docker-published.jpeg)
+![Results Display](images/docker-published.png)
 ### Render Deployed
 ![Results Display](images/render-deployed.png)
+
 
 
