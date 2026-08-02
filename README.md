@@ -62,7 +62,7 @@ Run tests with:  pytest --maxfail=1 --disable-warnings -q
 ### Chat Interface
 ![Chat Interface](images/chat-interface.png)
 ### Docker Publish
-![Results Display](images/docker-published.png)
+![Results Display](images/docker-published.jpeg)
 ### Render Deployed
 ![Results Display](images/render-deployed.png)
 
