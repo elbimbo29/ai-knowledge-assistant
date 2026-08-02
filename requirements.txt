@@ -25,5 +25,5 @@ pypdf==4.2.0             # PDF parsing and text extraction for ingestion into RA
 markdown==3.7            # Markdown parsing/rendering for handling .md files
 
 faiss-cpu
-faiss-gpu
+
 
