@@ -92,21 +92,51 @@ streamlit run src/app.py
 
 ## 🚀 Deployment
 
-### 🔹 Docker Build & Run
+🔹 Docker Build & Run
 ```bash
 # Build Docker image
 docker build -t ai-knowledge-assistant .
-
 # Run container locally
 docker run -p 8501:8501 ai-knowledge-assistant
 
-### 🔹 GitHub Actions CI/CD
+🔹 GitHub Actions CI/CD
+CI/CD pipeline is defined in .github/workflows/ci-cd.yml.
+On every push to main, GitHub Actions will:
+Build the Docker image
+Push it to GitHub Container Registry (GHCR)
+Trigger deployment to Render
 
-The CI/CD pipeline is defined in `.github/workflows/ci-cd.yml`.  
-On every push to `main`, GitHub Actions will:
+🔹 Render Deployment
+Follow these steps to deploy your app on Render:
+1. **Log in to Render**
+   - Go to [Render](https://render.com) and sign in.
+2. **Create a New Web Service**
+   - Connect your GitHub repository.
+3. **Configure Build Command**
+   ```bash
+   docker build -t ai-knowledge-assistant .
+4. **Configure Start Command**
+   Use the following command to launch the Streamlit app on Render:
+   ```bash
+   streamlit run src/app.py --server.port=$PORT --server.headless=true
+5. **Set Environment Variables**  
+   In the Render dashboard, go to **Environment → Add Environment Variables** and configure the following:
 
-1. **Checkout Code**
-   ```yaml
-   - name: Checkout repository
-     uses: actions/checkout@v3
+   - `OPENAI_API_KEY=your_api_key_here`  
+     (required for connecting to the OpenAI API)
+   - `PYTHON_VERSION=3.10`  
+     (optional, ensures consistent runtime)
+   - `STREAMLIT_SERVER_HEADLESS=true`  
+     (ensures Streamlit runs in headless mode on Render)
+   - `STREAMLIT_SERVER_PORT=$PORT`  
+     (Render automatically injects the `$PORT` variable)
+   Add any other secrets or configuration values your app requires.
+
+6. **Deploy**  
+   Once everything is configured:
+
+   - Click **Create Web Service** in Render.  
+   - Render will build your Docker image and start the service.  
+   - The app will be accessible via your Render‑provided URL.  
+   - Future pushes to the `main` branch will automatically trigger redeployment.  
 
