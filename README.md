@@ -22,6 +22,18 @@ It features a CI/CD pipeline with GitHub Actions for automated builds and testin
 - Automatic deployment to Render via Docker
 
 ---
+## ⚙️ Tech Stack
+| **Component** | **Technology** | **Purpose** |
+| --- | --- | --- |
+| **Frontend** | [Streamlit](ca://s?q=Streamlit_framework_overview) | Interactive UI for document upload and Q&A |
+| **Backend** | [Python](ca://s?q=Python_language_features) | Core logic and integration |
+| **RAG Pipeline** | [LangChain](ca://s?q=LangChain_RAG_framework) | Retrieval‑Augmented Generation orchestration |
+| **Vector Database** | [ChromaDB](ca://s?q=ChromaDB_vector_database) | Document embeddings and semantic search |
+| **LLM API** | [OpenAI API](ca://s?q=OpenAI_API_usage) | Generates contextual answers |
+| **CI/CD** | [GitHub Actions](ca://s?q=GitHub_Actions_CI_CD) | Automated build and deployment |
+| **Hosting** | [Render](ca://s?q=Render_deployment_platform) | Cloud deployment for the Streamlit app |
+| **Containerization** | [Docker](ca://s?q=Docker_containerization_basics) | Environment consistency and portability |
+---
 
 ## 📖 Documentation Phases
 
@@ -36,6 +48,29 @@ It features a CI/CD pipeline with GitHub Actions for automated builds and testin
 - **Phase 09** → Sequence diagram
 - **Phase 10** → Deployment diagram
 - **Phase 11** → Component & layered architecture
+
+---
+
+🧩 Setup Instructions
+
+### 1️⃣ Clone the repository
+git clone https://github.com/<your‑username>/ai‑knowledge‑assistant.git
+cd ai‑knowledge‑assistant
+
+### 2️⃣ Create a virtual environment
+python -m venv venv
+source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate      # Windows
+
+### 3️⃣ Install dependencies
+pip install -r requirements.txt
+
+### 4️⃣ Configure environment variables
+Create a `.env` file and add your keys:
+OPENAI_API_KEY=your_api_key_here
+
+### 5️⃣ Run the Streamlit app
+streamlit run src/app.py
 
 ---
 
