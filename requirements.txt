@@ -13,6 +13,7 @@ langchain-text-splitters==0.2.4   # Utility for splitting text into chunks for R
 # --- Vector database ---
 chromadb==0.5.3          # ChromaDB vector database (modern version, matches langchain-chroma)
 rpds-py==0.18.0          # Rust-based persistent data structures (dependency of ChromaDB)
+faiss-cpu==1.8.0         # FAISS CPU-only build for vector similarity search
 
 # --- Validation & utilities ---
 pydantic==2.7.4          # Data validation and settings management (used by LangChain + app configs)
@@ -23,7 +24,3 @@ packaging==24.1          # Version parsing and packaging utilities (dependency f
 # --- Document handling ---
 pypdf==4.2.0             # PDF parsing and text extraction for ingestion into RAG
 markdown==3.7            # Markdown parsing/rendering for handling .md files
-
-faiss-cpu
-
-
