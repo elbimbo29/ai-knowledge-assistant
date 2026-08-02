@@ -74,6 +74,31 @@ streamlit run src/app.py
 
 ---
 
+## 🚀 Deployment
+
+ 🔹 Docker Build & Run
+```bash
+# Build Docker image
+docker build -t ai-knowledge-assistant .
+
+# Run container locally
+docker run -p 8501:8501 ai-knowledge-assistant
+
+
+🔹 GitHub Actions CI/CD
+
+CI/CD pipeline is defined in .github/workflows/ci-cd.yml.
+
+On every push to main, GitHub Actions will:
+
+Build the Docker image
+
+Push it to GitHub Container Registry (GHCR)
+
+Trigger deployment to Render
+
+---
+
 ## 🧪 Application Screenshots
 
 ### Home Screen
